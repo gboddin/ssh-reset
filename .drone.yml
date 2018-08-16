@@ -1,0 +1,10 @@
+pipeline:
+  publish-mock-client:
+    group: docker-image
+    image: plugins/docker
+    repo: gboo/ssh-reset
+    dockerfile: Dockerfile
+    secrets: [ docker_username, docker_password ]
+    when:
+      branch: master
+      event: push
