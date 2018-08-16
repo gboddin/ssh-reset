@@ -10,5 +10,5 @@ Works when :
 ## Usage 
 
 ```bash
-docker run -e SSH_HOSTNAME=my-awesome-server.com -e SSH_USERNAME=user -e SSH_PASSWORD=Wonderful2 -e SSH_NEW_PASSWORD=Wonderful3 gboo/ssh-reset
+docker run -e FORCE_KEY_RESET=false -e SSH_HOSTNAME=my-awesome-server.com -e SSH_USERNAME=user -e SSH_PASSWORD=Wonderful2 -e SSH_NEW_PASSWORD=Wonderful3 gboo/ssh-reset
 ```
