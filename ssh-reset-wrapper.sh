@@ -1,12 +1,17 @@
-#!/usr/bin/expect -f
+#!/bin/sh
+set -e
+ssh-reset-wrapper.expect
+echo -n "Testing connection : "
 
-spawn ssh -t -l $env(SSH_USERNAME) -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o PubkeyAuthentication=no $env(SSH_HOSTNAME) passwd
-expect "assword:"
-send "$env(SSH_PASSWORD)\r"
-expect "assword:"
-send "$env(SSH_PASSWORD)\r"
-expect "password:"
-send "$env(SSH_NEW_PASSWORD)\r"
-expect "password:"
-send "$env(SSH_NEW_PASSWORD)\r"
-expect eof
+sshpass -p "${SSH_NEW_PASSWORD}" ssh ${SSH_USERNAME}@${SSH_HOSTNAME} "echo OK"
+
+if [ ! -z "${SSH_AUTHORIZED_KEYS}" ]; then
+  echo -n "Public keys specified, uploading : "
+  set +e
+  sshpass -p "${SSH_NEW_PASSWORD}" ssh ${SSH_USERNAME}@${SSH_HOSTNAME} 'mkdir ${HOME}/.ssh' 2> /dev/null
+  set -e
+  echo "${SSH_AUTHORIZED_KEYS}" | sshpass -p "${SSH_NEW_PASSWORD}" ssh ${SSH_USERNAME}@${SSH_HOSTNAME} 'cat >> ${HOME}/.ssh/authorized_keys'
+  sshpass -p "${SSH_NEW_PASSWORD}" ssh ${SSH_USERNAME}@${SSH_HOSTNAME} 'chmod 640 ${HOME}/.ssh/authorized_keys'
+  sshpass -p "${SSH_NEW_PASSWORD}" ssh ${SSH_USERNAME}@${SSH_HOSTNAME} 'chmod 750 ${HOME}/.ssh'
+  echo "OK"
+fi

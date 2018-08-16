@@ -5,7 +5,7 @@ ENV SSH_USERNAME user
 ENV SSH_PASSWORD none
 ENV SSH_NEW_PASSWORD unsafe
 
-RUN apk add --no-cache expect openssh-client
+RUN apk add --no-cache expect openssh-client sshpass
 
-ADD ssh-reset-wrapper.sh /bin/ssh-reset-wrapper.sh
+ADD ssh-reset-wrapper.* /bin/
 CMD /bin/ssh-reset-wrapper.sh
